@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="click-sound.js"></script>
+    </head>
+    <body>
+        <table border="1">
+            <tr>
+                <td colspan="4">
+                    <input type="text" id="inputBox" value="0"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align:right; border:none; background:none; padding:0; height:1px;">
+                    <button id="themeBtn" onclick="toggleTheme()" style="font-size:1em; padding:2px 8px; margin:2px; min-width:unset; width:auto;">Theme</button>
+                </td>
+            </tr>
+            <tr>
+                <td class="digitButton" onclick="digitBtPressed(7)">7</td>
+                <td class="digitButton" onclick="digitBtPressed(8)">8</td>
+                <td class="digitButton" onclick="digitBtPressed(9)">9</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('x')">x</td>
+            </tr>
+            <tr>
+                <td class="digitButton" onclick="digitBtPressed(4)">4</td>
+                <td class="digitButton" onclick="digitBtPressed(5)">5</td>
+                <td class="digitButton" onclick="digitBtPressed(6)">6</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('-')">-</td>
+            </tr>
+            <tr>
+                <td class="digitButton" onclick="digitBtPressed(1)">1</td>
+                <td  class="digitButton" onclick="digitBtPressed(2)">2</td>
+                <td class="digitButton" onclick="digitBtPressed(3)">3</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('+')">+</td>
+            </tr>
+            <tr>
+                <td class="digitButton" colspan="2" onclick="digitBtPressed(0)">0</td>
+                <td class="ACButton" onclick="btnACPressed()">AC</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('/')">/</td>
+            </tr>
+            <tr>
+                <td class="operatorButton" onclick="sqrtBtnPressed()">√</td>
+                <td class="operatorButton" onclick="backspaceBtnPressed()">⌫</td>
+                <td class="operatorButton" colspan="2" onclick="equalBtnPressed()">=</td>
+            </tr>
+        </table>
+        <script>
+            var newLine = true; // boolean variable for next line,(type in a new line)
+            var value1;
+            var currentOperator;
+
+            // this function is called event handler. "what happens when you click a a button "
+            function digitBtPressed(button){
+                playClickSound();
+                if (newLine){
+                    document.getElementById("inputBox").value = button
+                    newLine = false;
+                } else{
+                    var currentValue = document.getElementById("inputBox").value;
+                    document.getElementById("inputBox").value = currentValue + button
+                }
+            }
+            // this function is called event handler. "what happens when you click  AC clear butoon"
+            function btnACPressed(){
+                playClickSound();
+                document.getElementById("inputBox").value = 0;
+                newLine = true
+            }
+            // this function is called event handler. "what happens when you click operators button  plu minus and so on "
+            function operatorBtnPressed(operator){
+                playClickSound();
+                currentOperator = operator
+                value1 = parseInt(document.getElementById("inputBox").value)
+                newLine = true;
+            }
+                // event handler for the equals to button
+                function equalBtnPressed(){
+                    playClickSound();
+                    var value2 = parseInt(document.getElementById("inputBox").value);
+                    var finalTotal;
+
+                    switch(currentOperator){
+                        case "+":
+                            finalTotal= value1 + value2
+                            break;
+                        case "-":
+                            finalTotal = value1 - value2
+                            break;
+                        case "/":
+                            finalTotal= value1 / value2
+                            break;
+                        case "x":
+                            finalTotal = value1 * value2
+                    }
+                    document.getElementById("inputBox").value = finalTotal
+
+                    value1 = 0;
+                    newLine = true
+                }
+                // SQUARE ROOT BUTTON FUNCTION
+                function sqrtBtnPressed() {
+                    playClickSound();
+                    var inputBox = document.getElementById("inputBox");
+                    var value = parseFloat(inputBox.value);
+                    if (value < 0) {
+                        inputBox.value = "Error";
+                    } else {
+                        inputBox.value = Math.sqrt(value);
+                    }
+                    newLine = true;
+                }
+                // BACKSPACE BUTTON FUNCTION
+                function backspaceBtnPressed() {
+                    playClickSound();
+                    var inputBox = document.getElementById("inputBox");
+                    var value = inputBox.value;
+                    if (value.length > 1 && value !== "Error") {
+                        inputBox.value = value.slice(0, -1);
+                    } else {
+                        inputBox.value = 0;
+                        newLine = true;
+                    }
+                }
+                // THEME TOGGLE FUNCTION
+                function toggleTheme() {
+                    playClickSound();
+                    var body = document.body;
+                    body.classList.toggle('dark-theme');
+                    var btn = document.getElementById('themeBtn');
+                    if (body.classList.contains('dark-theme')) {
+                        btn.textContent = 'Light Theme';
+                    } else {
+                        btn.textContent = 'Dark Theme';
+                    }
+                }
+        </script>
+    </body>
+</html>
